@@ -20,7 +20,6 @@
     mov al, ' '
     int 0x10
 
-   
     mov al, [the_secret]  
     int 0x10             ;Print the 'X' to the screen
 
@@ -29,7 +28,7 @@
     the_secret:
         db "X"
 
-; Fill with 510 zeros minus the size of the previous code
+    ; Fill with 510 zeros minus the size of the previous code
     times 510-($-$$) db 0
     dw 0xaa55 ; Magic number
 
