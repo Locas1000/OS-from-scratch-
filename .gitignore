@@ -21,6 +21,7 @@ config.json
 *.so
 *.dll
 *.exe
+*.bin
 
 # --- Dependency Directories ---
 # These are managed by package managers (like npm, pip, composer).
@@ -59,4 +60,4 @@ yarn-error.log
 .vscode/
 *.suo
 *.user
-boot_sect_simple.bin
+
