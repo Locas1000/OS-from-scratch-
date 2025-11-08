@@ -14,7 +14,7 @@
     %include "./bootsector-functions/boot_sect_print_hex.asm"
 
     HELLO:
-        db 'Hello,World',0
+        db 'Hello, World',0
     
     GOODBYE:
         db 'Goodbye',0
