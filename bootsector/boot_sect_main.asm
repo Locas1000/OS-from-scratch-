@@ -1,25 +1,33 @@
 [org 0x7c00]       ;global offset
 
-    mov bx, HELLO 
-    call print
-    call print_nl
+    mov bp, 0x8000 ; set stack safely away from program
+    mov sp,bp
+    
+    mov bx, 0x9000 ; es:bx = 0x0000:0x9000
+    mov dh, 2 
+    ; the bios sets 'dl' for our boot disk number 
+    ; if oyu have trouble, use the '-fda' flag: 'qemu -fda file.bin'
 
-    mov bx, GOODBYE
-    call print
+    call disk_load
+
+    mov dx,[0x9000] ; retrieve the first loaded word, 0xdada
+    call print_hex
     call print_nl
+    
+    mov dx,[0x9000 + 512]; first word from second loaded sector, 0xface
+    call print_hex
 
     jmp $   ;infinite loop 
 
     %include "./bootsector-functions/boot_sect_print.asm"
     %include "./bootsector-functions/boot_sect_print_hex.asm"
+    %include "boot_sect_disk.asm"
 
-    HELLO:
-        db 'Hello, World',0
-    
-    GOODBYE:
-        db 'Goodbye',0
-
-; Fill with 510 zeros minus the size of the previous code
+    ; Fill with 510 zeros minus the size of the previous code
     times 510-($-$$) db 0
     dw 0xaa55 ; Magic number
 
+    ; boot sector = sector 1 of cyl 0 of head 0 of hdd 0 
+    ; from now on = sector 2...
+    times 256 dw 0xdada
+    times 256 dw 0xface
