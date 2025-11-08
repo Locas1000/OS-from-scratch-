@@ -3,7 +3,7 @@ print:
 
 ;while (string[i] !=0) {print string[i]; i++}
 start:
-    mov al, [bx] ;base address fot the string 
+    mov al, [bx] ;base address for the string 
     cmp al,0
     je done ;jump if equal/zero
 

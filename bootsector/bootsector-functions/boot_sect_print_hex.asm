@@ -7,13 +7,13 @@ hex_loop:
     cmp cx,4 ; loop 4 times
     je end
     
-    ; covert last char od 'dx' to ASCII
+    ; convert last char of 'dx' to ASCII
     mov ax,dx 
     and ax,0x000f 
     add al,0x30 ; add 0x30 to N to convert into ASCII N
     cmp al,0x39 ; if > 9, add extra 8 to represent 'A' to 'F'
     jle step2
-    add al,7 ;'A' is ASCII 65 instead of 58, so 65-68= 7
+    add al,7 ; 'A' is ASCII 65, after adding 0x30 to 10 we get 58, so 65-58=7
 
 step2:
     mov bx,HEX_OUT + 5 ; base +length
