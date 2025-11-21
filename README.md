@@ -48,14 +48,14 @@ Ensure you have the basics installed:
 ```bash
 sudo apt update
 sudo apt install build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libncurses-dev nasm qemu-system-x86
-````
+```
 
 **Step B: Install the Toolchain (Automated)**
 We have provided a script to build the specific Cross-Compiler (GCC 4.9 + GDB) needed for this project.
 
 1.  Run the setup script:
     ```bash
-    ./scripts/setup_toolchain.sh
+    ./scripts/install_toolchain.sh
     ```
 2.  *Wait roughly 10-15 minutes for the compiler to build.*
 3.  **Close your terminal and open a new one** to refresh your PATH.
