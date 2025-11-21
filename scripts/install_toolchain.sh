@@ -15,10 +15,10 @@ export WORK_DIR="$HOME/src_toolchain"
 
 # Create a fresh workspace
 echo ">>> Creating workspace at $WORK_DIR..."
-mkdir -p $WORK_DIR
-cd $WORK_DIR
+mkdir -p "$WORK_DIR"
+cd "$WORK_DIR"
 
-# 3. Install Dependencies
+# 3. Install dependencies
 echo ">>> Installing dependencies..."
 sudo apt update
 sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libncurses-dev
@@ -40,7 +40,7 @@ make -j$(nproc)
 
 echo ">>> Installing Binutils..."
 sudo make install
-cd $WORK_DIR
+cd "$WORK_DIR"
 
 # ---------------------------------------------------------
 # PHASE 2: GCC (Version 4.9.1 - Patched for Modern Linux)
@@ -62,7 +62,7 @@ make all-target-libgcc -j$(nproc)
 echo ">>> Installing GCC..."
 sudo make install-gcc
 sudo make install-target-libgcc
-cd $WORK_DIR
+cd "$WORK_DIR"
 
 # ---------------------------------------------------------
 # PHASE 3: GDB (Modern Version 9.2)
@@ -80,14 +80,14 @@ make -j$(nproc)
 
 echo ">>> Installing GDB..."
 sudo make install
-cd $WORK_DIR
+cd "$WORK_DIR"
 
 # ---------------------------------------------------------
 # FINISH: Cleanup and Persistence
 # ---------------------------------------------------------
 echo ">>> Cleaning up source files..."
 cd $HOME
-rm -rf $WORK_DIR
+rm -rf "$WORK_DIR"
 
 echo ">>> Making PATH permanent..."
 # Only add to bashrc if it's not already there
