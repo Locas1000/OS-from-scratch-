@@ -1,93 +1,98 @@
 
-
-# Basic Operating System
-## A Basic x86 Operating System
+# Basic x86 Operating System
 
 ![My OS Booting](screenshots/os-boot.png)
-*(Optional: Replace this line with a relative path to a screenshot of your OS booting, e.g., `docs/screenshot.png`)*
+> A 32-bit operating system developed from scratch in C and Assembly.
 
-This repository contains the source code for a minimal, "from-scratch" x86 operating system kernel. This was developed as the final project for the Operating Systems class at Universidad Autónoma de Guadalajara.
+This repository contains the source code for a minimal, monolithic x86 kernel. It was developed as the **Final Project** for the Operating Systems course at Universidad Autónoma de Guadalajara.
 
-The primary goal of this project was not to create a full-featured consumer OS, but to demonstrate a deep understanding of low-level system architecture. It features a custom bootloader, 32-bit Protected Mode switching, and a monolithic kernel written in C.
+The primary goal of this project is not to create a full-featured consumer OS, but to demonstrate a deep understanding of low-level system architecture, memory management, and hardware interaction.
 
-## 🏫 Course Information
+## Course Information
 
-* **Institution:** `Universidad Autónoma de Guadalajara`
-* **Course:** `Sistemas Operativos`
-* **Professor:** `Agustín Villarreal`
-* **Project:** `Final Project`
+| Category | Details |
+| :--- | :--- |
+| **Institution** | Universidad Autónoma de Guadalajara (UAG) |
+| **Course** | Operating Systems |
+| **Professor** | Agustín Villarreal |
+| **Project** | Final Project (Kernel from Scratch) |
 
-## 🚀 Features
+## Implemented Features
 
-This minimal OS currently implements the following low-level features:
+This operating system implements the following low-level features:
 
-* **Custom Bootloader:** Written in Assembly (NASM) to load the kernel from disk.
-* **32-bit Protected Mode:** Transitions from 16-bit Real Mode to 32-bit Protected Mode (GDT configuration).
-* **C Kernel:** High-level kernel logic compiled with a custom cross-compiler.
-* **VGA Text Mode:** Custom drivers to print strings and hex values directly to video memory (`0xb8000`).
-* **Cross-Compilation Toolchain:** Includes scripts to build a dedicated GCC/Binutils toolchain for the `i386-elf` architecture.
-* **Architecture:** Monolithic Kernel design.
+* **Custom Bootloader:** Written in Assembly (NASM) to load the kernel from the disk.
+* **32-bit Protected Mode:** Full transition from 16-bit Real Mode to 32-bit Protected Mode, including GDT (Global Descriptor Table) configuration.
+* **C Kernel:** Core system logic written in C, linked with the Assembly entry points.
+* **Interrupt Handling (IDT & ISR):** Configuration of the Interrupt Descriptor Table and Interrupt Service Routines to handle CPU exceptions and hardware interrupts.
+* **Hardware Drivers:**
+    * **VGA Driver:** Direct writing to video memory (`0xb8000`) with support for scrolling and cursor movement.
+    * **Keyboard Driver:** User input handling via keyboard interrupts (IRQ1) and scancode translation.
+* **Mini "LibC":** Custom implementation of standard C library functions, including `kmalloc`, `memcpy`, `strlen`, `hex_to_ascii`, etc.
+* **Interactive Shell:** A basic command-line interface that responds to user input.
 
-## 📂 Project Structure
+## Project Structure
 
-* `boot/`: Assembly source code for the bootloader and GDT configuration.
-* `kernel/`: C source code for the kernel and hardware drivers.
-* `scripts/`: Automation scripts for environment setup.
-* `Makefile`: Build automation for compiling and linking the OS image.
+The project architecture has been modularized to facilitate development and maintenance:
 
-## 🛠 How to Build and Run
+* `boot/`: Assembly source code for the bootloader (MBR), Protected Mode switch, and GDT.
+* `kernel/`: Main kernel entry point (`main`) and high-level logic.
+* `cpu/`: Low-level system management (IDT, ISR, I/O Ports, Timer).
+* `drivers/`: Hardware device drivers (Screen and Keyboard).
+* `libc/`: Helper libraries for string manipulation and memory management.
+* `scripts/`: Automation scripts for the cross-compilation environment.
+* `Makefile`: Build automation system to generate the OS image (`os-image.bin`).
 
-This project requires a specific cross-compiler toolchain because using your system's default C compiler (Linux/GCC) will cause linking errors for the OS kernel.
+## Build and Run
 
-### 1. Prerequisites
+This project requires a specific **Cross-Compiler** (`i386-elf-gcc`), as the standard Linux compiler (`gcc`) targets the host operating system, not our standalone kernel.
 
-You need a Linux environment (Ubuntu/Debian/Mint recommended).
+### 1. Prerequisites (Linux)
+
+We recommend using Ubuntu, Debian, or Linux Mint.
 
 **Step A: Install Dependencies**
-Ensure you have the basics installed:
 ```bash
 sudo apt update
 sudo apt install build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libncurses-dev nasm qemu-system-x86
-```
+````
 
-**Step B: Install the Toolchain (Automated)**
-We have provided a script to build the specific Cross-Compiler (GCC 4.9 + GDB) needed for this project.
+**Step B: Build the Toolchain (Automated)**
+We have provided a script to download and compile GCC and Binutils for the `i386-elf` architecture.
 
-1.  Run the setup script:
+1.  Run the installation script:
     ```bash
     ./scripts/install_toolchain.sh
     ```
-2.  *Wait roughly 10-15 minutes for the compiler to build.*
-3.  **Close your terminal and open a new one** to refresh your PATH.
+2.  *Please wait: This process may take 10-20 minutes.*
+3.  **Important:** Close and reopen your terminal after completion to refresh your environment variables.
 
-### 2\. Build and Run
+### 2\. Compile and Run
 
-We use a `Makefile` to automate the compilation of Assembly and C files.
+Use the `Makefile` to automate the build process.
 
-**To compile and run QEMU immediately:**
+**To compile and launch QEMU immediately:**
 
 ```bash
 make run
 ```
 
-**To clean up generated binary files:**
+**To clean up generated binary files (.o, .bin):**
 
 ```bash
 make clean
 ```
 
-## 📚 Acknowledgements
+## Authors
 
-This project was heavily inspired by the **"How to make an OS in C" tutorial** by Carlos Fenollosa (@cfenollosa). The structure and step-by-step guidance provided in that tutorial were the primary resource for this project.
+  * **Lucas Castineiras** - [GitHub: @Locas1000](https://www.google.com/search?q=https://github.com/Locas1000)
+  * **Carlo Virgilio** - [GitHub: @carlovirgil](https://www.google.com/search?q=https://github.com/carlovirgil)
+  * **Luis Mario Romano** - [GitHub: @LuigiSs31](https://www.google.com/search?q=https://github.com/LuigiSs31)
 
-  * **Original Tutorial Repository:** [github.com/cfenollosa/os-tutorial](https://github.com/cfenollosa/os-tutorial)
+## Acknowledgements
 
-Our work involved adapting the tutorial code to modern Linux environments, creating automated build scripts, and refactoring the file structure for better organization.
+This project was heavily inspired by the **"How to make an OS in C"** tutorial by Carlos Fenollosa. His guide was fundamental in understanding the foundations of this project.
 
------
+  * *Reference:* [github.com/cfenollosa/os-tutorial](https://github.com/cfenollosa/os-tutorial)
 
-## 👥 Authors
-
-  * **Lucas Castineiras** - `GitHub: Locas1000`
-  * **Carlo Virgilio** - ` GitHub:  `
-  * **Luis Mario Romano** - ` GitHub:  `
+Our work involved adapting the code to modern Linux environments, fixing compilation bugs, refactoring the file architecture, and implementing additional features such as memory management and improved keyboard input.
